@@ -1,0 +1,89 @@
+@layout Home
+@page "/home/login"
+@page "/home"
+@page "/"
+
+@inject NavigationManager NavigationManager
+@implements IDisposable
+
+<div class="row-layout login-container">
+    <div class="row-layout left">
+        <div class="column-layout group">
+            <img src="assets/Travel-App-Color-Logo.svg" alt="" class="image" />
+            <div class="column-layout group_1">
+                <h5 class="h5">
+                    Login
+                </h5>
+                <p class="typography__body-2 text">
+                    Please, login so you can access all applications features.
+                </p>
+            </div>
+            <div class="column-layout group_2">
+                <IgbInput DisplayType="InputType.Email" Value=@_value Label="Email address" Placeholder="myname@website.com" Outlined=false Change=@(e => _value = e.Detail) class="input" login-scope></IgbInput>
+                <IgbInput DisplayType="InputType.Password" Value=@_value1 Label="Password" Placeholder="Min 8 characters" Outlined=false Change=@(e => _value1 = e.Detail) class="input" login-scope></IgbInput>
+                <div class="row-layout group_3">
+                    <IgbCheckbox LabelPosition="CheckboxBaseLabelPosition.After" Checked=@_checked Change=@(e => _checked = e.Detail.Checked) class="checkbox" login-scope>
+                        Remember me
+                    </IgbCheckbox>
+                    <a @onclick=@(() => NavigationManager.NavigateTo($"home/reset-password")) class="typography__body-2 hyperlink">
+                        Forgot password?
+                    </a>
+                </div>
+            </div>
+            <div class="column-layout group_4">
+                <IgbButton DisplayType="ButtonBaseType.Button" @onclick=@(() => NavigationManager.NavigateTo($"in-app/dashboard")) class="button" login-scope>
+                    LOGIN
+                </IgbButton>
+                <div class="row-layout group_5"></div>
+                <IgbButton Variant="ButtonVariant.Outlined" DisplayType="ButtonBaseType.Button" @onclick=@(() => NavigationManager.NavigateTo($"home/sign-up")) class="button button_1" login-scope>
+                    Don't have a registration? Sign up now!
+                </IgbButton>
+            </div>
+        </div>
+    </div>
+    <div class="row-layout right">
+        <img src="assets/SignIn.jpg" alt="" class="image_1" />
+    </div>
+</div>
+
+@code {
+    private string _value;
+    private string _value1;
+    private bool _checked = true;
+    private bool _isComponentActive = false;
+
+    protected override async Task OnAfterRenderAsync(bool isFirstRender)
+    {
+        if (isFirstRender)
+        {
+            _isComponentActive = true;
+            NavigationManager.LocationChanged += OnLocationChanged;
+            EnsureDefaultRoute();
+        }
+        await base.OnAfterRenderAsync(isFirstRender);
+    }
+
+    public void Dispose()
+    {
+        _isComponentActive = false;
+        NavigationManager.LocationChanged -= OnLocationChanged;
+    }
+
+    protected void OnLocationChanged(object sender, object e)
+    {
+        if (_isComponentActive)
+        {
+            EnsureDefaultRoute();
+        }
+    }
+
+    protected void EnsureDefaultRoute()
+    {
+        var defaultPath = $"home/login";
+        var currentRoute = NavigationManager.ToBaseRelativePath(NavigationManager.Uri).Split('?')[0];
+        if (!string.Equals(defaultPath, currentRoute, StringComparison.OrdinalIgnoreCase))
+        {
+            NavigationManager.NavigateTo(defaultPath, replace: true);
+        }
+    }
+}

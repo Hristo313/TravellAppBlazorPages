@@ -1,0 +1,49 @@
+@layout Home
+@page "/home/sign-up"
+
+@inject NavigationManager NavigationManager
+
+<div class="row-layout sign-up-container">
+    <div class="row-layout left">
+        <div class="column-layout group">
+            <img src="assets/Travel-App-Color-Logo.svg" alt="" class="image" />
+            <div class="column-layout group_1">
+                <h5 class="h5">
+                    Sign Up
+                </h5>
+                <p class="typography__body-2 text">
+                    Don't have an account? Sign up now for free and enjoy thousands of great travel opportunities
+                </p>
+            </div>
+            <div class="column-layout group_2">
+                <IgbInput DisplayType="InputType.Email" Value=@_value Label="Email address" Placeholder="myname@website.com" Outlined=false Change=@(e => _value = e.Detail) class="input" sign_up-scope></IgbInput>
+                <IgbInput DisplayType="InputType.Password" Value=@_value1 Label="Password" Placeholder="Min 8 characters" Outlined=false Change=@(e => _value1 = e.Detail) class="input" sign_up-scope></IgbInput>
+                <IgbInput DisplayType="InputType.Password" Value=@_value2 Label="Repeat Password" Placeholder="Min 8 characters" Outlined=false Change=@(e => _value2 = e.Detail) class="input" sign_up-scope></IgbInput>
+                <div class="row-layout group_3">
+                    <IgbCheckbox LabelPosition="CheckboxBaseLabelPosition.After" Checked=@_checked Change=@(e => _checked = e.Detail.Checked) class="checkbox" sign_up-scope>
+                        Remember me
+                    </IgbCheckbox>
+                </div>
+            </div>
+            <div class="column-layout group_4">
+                <IgbButton DisplayType="ButtonBaseType.Button" @onclick=@(() => NavigationManager.NavigateTo($"in-app/dashboard")) class="button" sign_up-scope>
+                    Create new account
+                </IgbButton>
+                <div class="row-layout group_5"></div>
+                <IgbButton Variant="ButtonVariant.Outlined" DisplayType="ButtonBaseType.Button" @onclick=@(() => NavigationManager.NavigateTo($"home/login")) class="button button_1" sign_up-scope>
+                    Already have an account? SIgn in
+                </IgbButton>
+            </div>
+        </div>
+    </div>
+    <div class="row-layout right">
+        <img src="assets/SignUp.jpg" alt="" class="image_1" />
+    </div>
+</div>
+
+@code {
+    private string _value;
+    private string _value1;
+    private string _value2;
+    private bool _checked = true;
+}
