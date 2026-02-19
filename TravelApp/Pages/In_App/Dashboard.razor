@@ -1,0 +1,277 @@
+@layout In_App
+@page "/in-app/dashboard"
+@page "/in-app"
+
+@using TravelAppData
+@using Models.TravelAppData
+@inject NavigationManager NavigationManager
+@inject ITravelAppDataService TravelAppDataService
+@implements IDisposable
+
+<div class="row-layout dashboard-container">
+    <div class="column-layout left-content">
+        <div class="column-layout header">
+            <div class="column-layout group">
+                <h4 class="h4">
+                    Hi, Sarah!
+                </h4>
+                <p class="typography__subtitle-1 text">
+                    We have some great suggestions for your next travel! We've searched the whole web to provide you with these rare findings - special for you!
+                </p>
+            </div>
+        </div>
+        <div class="column-layout bottom-content">
+            <div class="column-layout latest-articles">
+                <div class="row-layout group_1">
+                    <h6 class="h6">
+                        Latest in articles
+                    </h6>
+                    <IgbButton Variant="ButtonVariant.Outlined" DisplayType="ButtonBaseType.Button" @onclick=@(() => NavigationManager.NavigateTo($"in-app/articles")) class="button" dashboard-scope>
+                        view all ARTICLES
+                    </IgbButton>
+                </div>
+                <div class="row-layout group_2">
+                    @foreach (var item in _travelAppDataSelectedArticles)
+                    {
+                        <IgbCard class="card" dashboard-scope>
+                            <IgbCardMedia class="media-content" dashboard-scope>
+                                <img src=@item.Image_url alt="" class="image" />
+                            </IgbCardMedia>
+                            <IgbCardHeader>
+                                <h3 slot="title">
+                                    @item.Title
+                                </h3>
+                                <h5 slot="subtitle">
+                                    @item.Subtitle
+                                </h5>
+                            </IgbCardHeader>
+                            <IgbCardActions>
+                                <IgbIconButton Variant="IconButtonVariant.Flat" slot="start">
+                                    <span class="material-icons">
+                                        bookmark_border
+                                    </span>
+                                </IgbIconButton>
+                                <IgbIconButton Variant="IconButtonVariant.Flat" slot="start">
+                                    <span class="material-icons">
+                                        share
+                                    </span>
+                                </IgbIconButton>
+                                <IgbButton Variant="ButtonVariant.Outlined" DisplayType="ButtonBaseType.Button" slot="end" class="button_1" dashboard-scope>
+                                    read
+                                </IgbButton>
+                            </IgbCardActions>
+                        </IgbCard>
+                    }
+                </div>
+            </div>
+            <div class="column-layout destinations">
+                <div class="row-layout group_3">
+                    <h6 class="h6">
+                        Destinations
+                    </h6>
+                    <IgbButton Variant="ButtonVariant.Outlined" DisplayType="ButtonBaseType.Button" class="button" dashboard-scope>
+                        VIEW ALL DESTINATIONS
+                    </IgbButton>
+                </div>
+                <div class="row-layout group_2">
+                    @foreach (var item in _travelAppDataDestinations)
+                    {
+                        <IgbCard class="card" dashboard-scope>
+                            <IgbCardMedia class="media-content" dashboard-scope>
+                                <img src=@item.Image_url alt="" class="image" />
+                            </IgbCardMedia>
+                            <IgbCardHeader>
+                                <h3 slot="title">
+                                    @item.Title
+                                </h3>
+                                <h5 slot="subtitle">
+                            </h5>
+                            </IgbCardHeader>
+                            <IgbCardActions>
+                                <IgbIconButton Variant="IconButtonVariant.Flat" slot="start">
+                                    <span class="material-icons">
+                                        bookmark_border
+                                    </span>
+                                </IgbIconButton>
+                                <IgbIconButton Variant="IconButtonVariant.Flat" slot="start">
+                                    <span class="material-icons">
+                                        share
+                                    </span>
+                                </IgbIconButton>
+                                <IgbButton Variant="ButtonVariant.Outlined" DisplayType="ButtonBaseType.Button" slot="end" class="button_1" dashboard-scope>
+                                    view
+                                </IgbButton>
+                            </IgbCardActions>
+                        </IgbCard>
+                    }
+                </div>
+            </div>
+            <div class="column-layout destinations">
+                <div class="row-layout group_3">
+                    <h6 class="h6">
+                        My travel lists
+                    </h6>
+                    <IgbButton Variant="ButtonVariant.Outlined" DisplayType="ButtonBaseType.Button" class="button" dashboard-scope>
+                        VIEW ALL LISTS
+                    </IgbButton>
+                </div>
+                <div class="row-layout group_4">
+                    <div class="column-layout group_5">
+                        <p class="typography__subtitle-2 text_1">
+                            USA
+                        </p>
+                        <IgbList class="list" dashboard-scope>
+                            <IgbListItem selected=@(_listSelectedItem != null && _listSelectedItem == "0") @onclick=@(() => _listSelectedItem = "0")>
+                                <div slot="title">Grand Canyon</div>
+                                <span slot="end" class="material-icons icon">
+                                    keyboard_arrow_right
+                                </span>
+                            </IgbListItem>
+                            <IgbListItem selected=@(_listSelectedItem != null && _listSelectedItem == "1") @onclick=@(() => _listSelectedItem = "1")>
+                                <div slot="title">Las Vegas, NV</div>
+                                <span slot="end" class="material-icons icon">
+                                    keyboard_arrow_right
+                                </span>
+                            </IgbListItem>
+                            <IgbListItem selected=@(_listSelectedItem != null && _listSelectedItem == "2") @onclick=@(() => _listSelectedItem = "2")>
+                                <div slot="title">Niagara Falls</div>
+                                <span slot="end" class="material-icons icon">
+                                    keyboard_arrow_right
+                                </span>
+                            </IgbListItem>
+                            <IgbListItem selected=@(_listSelectedItem != null && _listSelectedItem == "3") @onclick=@(() => _listSelectedItem = "3")>
+                                <div slot="title">Alaska</div>
+                                <span slot="end" class="material-icons icon">
+                                    keyboard_arrow_right
+                                </span>
+                            </IgbListItem>
+                            <IgbListItem selected=@(_listSelectedItem != null && _listSelectedItem == "4") @onclick=@(() => _listSelectedItem = "4")>
+                                <div slot="title">Washington D.C.</div>
+                                <span slot="end" class="material-icons icon">
+                                    keyboard_arrow_right
+                                </span>
+                            </IgbListItem>
+                        </IgbList>
+                    </div>
+                    <div class="column-layout group_5">
+                        <p class="typography__subtitle-2 text_1">
+                            WORLD
+                        </p>
+                        <IgbList class="list" dashboard-scope>
+                            <IgbListItem selected=@(_listSelectedItem1 != null && _listSelectedItem1 == "0") @onclick=@(() => _listSelectedItem1 = "0")>
+                                <div slot="title">Rome, Italy</div>
+                                <span slot="end" class="material-icons icon">
+                                    keyboard_arrow_right
+                                </span>
+                            </IgbListItem>
+                            <IgbListItem selected=@(_listSelectedItem1 != null && _listSelectedItem1 == "1") @onclick=@(() => _listSelectedItem1 = "1")>
+                                <div slot="title">Paris, France</div>
+                                <span slot="end" class="material-icons icon">
+                                    keyboard_arrow_right
+                                </span>
+                            </IgbListItem>
+                            <IgbListItem selected=@(_listSelectedItem1 != null && _listSelectedItem1 == "2") @onclick=@(() => _listSelectedItem1 = "2")>
+                                <div slot="title">London, England</div>
+                                <span slot="end" class="material-icons icon">
+                                    keyboard_arrow_right
+                                </span>
+                            </IgbListItem>
+                            <IgbListItem selected=@(_listSelectedItem1 != null && _listSelectedItem1 == "3") @onclick=@(() => _listSelectedItem1 = "3")>
+                                <div slot="title">Germany</div>
+                                <span slot="end" class="material-icons icon">
+                                    keyboard_arrow_right
+                                </span>
+                            </IgbListItem>
+                            <IgbListItem selected=@(_listSelectedItem1 != null && _listSelectedItem1 == "4") @onclick=@(() => _listSelectedItem1 = "4")>
+                                <div slot="title">Tokio, Japan</div>
+                                <span slot="end" class="material-icons icon">
+                                    keyboard_arrow_right
+                                </span>
+                            </IgbListItem>
+                        </IgbList>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="column-layout photos">
+        <div class="row-layout group_6">
+            <h6 class="h6">
+                Photos
+            </h6>
+            <IgbButton Variant="ButtonVariant.Outlined" DisplayType="ButtonBaseType.Button" class="button" dashboard-scope>
+                GO TO ALBUM
+            </IgbButton>
+        </div>
+        <div class="column-layout group_7">
+            <div class="column-layout group_8">
+                <div class="row-layout group_9">
+                    <div class="row-layout group_10">
+                        @foreach (var item in _travelAppDataImageSet1)
+                        {
+                            <img src=@item.Image_url alt="" class="image_1" />
+                        }
+                        @foreach (var item in _travelAppDataImageSet2)
+                        {
+                            <img src=@item.Image_url alt="" class="image_1" />
+                        }
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@code {
+    private string _listSelectedItem;
+    private string _listSelectedItem1;
+    private List<SelectedArticlesType> _travelAppDataSelectedArticles = new();
+    private List<DestinationsType> _travelAppDataDestinations = new();
+    private List<ImageSet1Type> _travelAppDataImageSet1 = new();
+    private List<ImageSet2Type> _travelAppDataImageSet2 = new();
+    private bool _isComponentActive = false;
+
+    protected override async Task OnInitializedAsync()
+    {
+        _travelAppDataSelectedArticles = await TravelAppDataService.GetSelectedArticles();
+        _travelAppDataDestinations = await TravelAppDataService.GetDestinations();
+        _travelAppDataImageSet1 = await TravelAppDataService.GetImageSet1();
+        _travelAppDataImageSet2 = await TravelAppDataService.GetImageSet2();
+        await base.OnInitializedAsync();
+    }
+
+    protected override async Task OnAfterRenderAsync(bool isFirstRender)
+    {
+        if (isFirstRender)
+        {
+            _isComponentActive = true;
+            NavigationManager.LocationChanged += OnLocationChanged;
+            EnsureDefaultRoute();
+        }
+        await base.OnAfterRenderAsync(isFirstRender);
+    }
+
+    public void Dispose()
+    {
+        _isComponentActive = false;
+        NavigationManager.LocationChanged -= OnLocationChanged;
+    }
+
+    protected void OnLocationChanged(object sender, object e)
+    {
+        if (_isComponentActive)
+        {
+            EnsureDefaultRoute();
+        }
+    }
+
+    protected void EnsureDefaultRoute()
+    {
+        var defaultPath = $"in-app/dashboard";
+        var currentRoute = NavigationManager.ToBaseRelativePath(NavigationManager.Uri).Split('?')[0];
+        if (!string.Equals(defaultPath, currentRoute, StringComparison.OrdinalIgnoreCase))
+        {
+            NavigationManager.NavigateTo(defaultPath, replace: true);
+        }
+    }
+}

@@ -1,0 +1,113 @@
+@layout MainLayout
+@inherits LayoutComponentBase
+
+@inject NavigationManager NavigationManager
+
+<div class="column-layout in-app-container">
+    <div class="row-layout group">
+        <div class="row-layout group_1">
+            <IgbIconButton Variant="IconButtonVariant.Flat" @onclick=@(e => _navDrawer!.ToggleAsync())>
+                <span class="material-icons">
+                    menu
+                </span>
+            </IgbIconButton>
+            <img src="assets/Travel-App-Color-Logo.svg" alt="" class="image" />
+        </div>
+        <div class="row-layout group_2">
+            <IgbIconButton Variant="IconButtonVariant.Flat" class="icon-button" in_app-scope>
+                <span class="material-icons icon">
+                    notifications
+                </span>
+            </IgbIconButton>
+            <IgbIconButton Variant="IconButtonVariant.Flat" class="icon-button_1" in_app-scope>
+                <span class="material-icons icon">
+                    search
+                </span>
+            </IgbIconButton>
+            <IgbAvatar Src="assets/Avatar2.png" Shape="AvatarShape.Circle" class="avatar" in_app-scope></IgbAvatar>
+            <p class="typography__body-2 text">
+                Sarah W.
+            </p>
+        </div>
+    </div>
+    <IgbNavDrawer @ref=_navDrawer class="nav-drawer" in_app-scope>
+        <IgbNavDrawerItem Active="@IsActive("in-app/dashboard")" @onclick=@(() => NavigationManager.NavigateTo($"in-app/dashboard"))>
+            <span slot="icon">
+                <span class="material-icons icon_1">
+                    dashboard
+                </span>
+            </span>
+            <div slot="content">Dashboard</div>
+        </IgbNavDrawerItem>
+        <IgbNavDrawerItem Active="@IsActive("in-app/discover")" @onclick=@(() => NavigationManager.NavigateTo($"in-app/discover"))>
+            <span slot="icon">
+                <span class="material-icons icon_1">
+                    image_search
+                </span>
+            </span>
+            <div slot="content">Discover</div>
+        </IgbNavDrawerItem>
+        <IgbNavDrawerItem Active="@IsActive("in-app/travel-lists")" @onclick=@(() => NavigationManager.NavigateTo($"in-app/travel-lists"))>
+            <span slot="icon">
+                <span class="material-icons icon_1">
+                    playlist_add_check
+                </span>
+            </span>
+            <div slot="content">Travel lists</div>
+        </IgbNavDrawerItem>
+        <IgbNavDrawerItem Active="@IsActive("in-app/articles")" @onclick=@(() => NavigationManager.NavigateTo($"in-app/articles"))>
+            <span slot="icon">
+                <span class="material-icons icon_1">
+                    chrome_reader_mode
+                </span>
+            </span>
+            <div slot="content">Articles</div>
+        </IgbNavDrawerItem>
+        <IgbNavDrawerItem Active="@IsActive("in-app/faq")" @onclick=@(() => NavigationManager.NavigateTo($"in-app/faq"))>
+            <span slot="icon">
+                <span class="material-icons icon_1">
+                    question_answer
+                </span>
+            </span>
+            <div slot="content">FAQ</div>
+        </IgbNavDrawerItem>
+        <IgbNavDrawerItem>
+            <span slot="icon">
+                <span class="material-icons icon_1">
+                    settings
+                </span>
+            </span>
+            <div slot="content">Settings</div>
+        </IgbNavDrawerItem>
+    </IgbNavDrawer>
+    <div class="view-container">
+        @Body
+    </div>
+</div>
+
+@code {
+    private IgbNavDrawer? _navDrawer;
+
+    public bool IsActive(string targetPath)
+    {
+        if (string.IsNullOrWhiteSpace(targetPath))
+            return false;
+
+        var baseUri = new Uri(NavigationManager.BaseUri);
+        var currentUri = new Uri(NavigationManager.Uri);
+        var targetUri = new Uri(baseUri, targetPath);
+
+        // Normalize paths (strip trailing slashes)
+        var currentPath = currentUri.AbsolutePath.TrimEnd('/');
+        var targetPathNormalized = targetUri.AbsolutePath.TrimEnd('/');
+
+        // Use Uri.Compare for comparison
+        var comparison = Uri.Compare(currentUri, targetUri, UriComponents.Path, UriFormat.Unescaped, StringComparison.OrdinalIgnoreCase);
+
+        // Exact match
+        if (comparison == 0)
+            return true;
+
+        return false;
+    }
+}
